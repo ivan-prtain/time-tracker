@@ -1,0 +1,28 @@
+* {
+  font-family: Raleway;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+}
+
+
+
+input {
+  &:focus {
+    outline: none;
+  }
+}
+
+textarea {
+  &:focus {
+    outline: none;
+  }
+}
+
+.app {
+  width: 100vw;
+}
