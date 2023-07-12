@@ -1,9 +1,25 @@
+import { Timestamp } from '@firebase/firestore';
+import { updateDoc, doc, collection } from 'firebase/firestore'
+import { db } from '../../FirebaseConfig'
 import React, { useState, useEffect } from 'react';
 
-const Stopwatch = () => {
-    const [hours, setHours] = useState(0);
-    const [minutes, setMinutes] = useState(0);
-    const [seconds, setSeconds] = useState(0);
+type TrackerType = {
+    id: string,
+    description: string,
+    time: string
+    date: Timestamp
+}
+
+type StopwatchProps = {
+    isAllSTop: boolean
+    isActive: boolean
+    data: TrackerType
+}
+
+const Stopwatch = ({ isAllSTop, data, isActive }: StopwatchProps) => {
+    const [hours, setHours] = useState(parseInt(data.time.split(':')[0]));
+    const [minutes, setMinutes] = useState(parseInt(data.time.split(':')[1]));
+    const [seconds, setSeconds] = useState(parseInt(data.time.split(':')[2]));
     const [isRunning, setIsRunning] = useState(false);
 
     useEffect(() => {
@@ -30,6 +46,22 @@ const Stopwatch = () => {
         return () => clearInterval(interval);
     }, [isRunning]);
 
+    useEffect(() => {
+        if (isActive) {
+            setIsRunning(true);
+        } else {
+            setIsRunning(false);
+            updateDbTime();
+        }
+    }, [isActive]);
+
+    const updateDbTime = async () => {
+        const docRef = doc(db, 'trackers', data.id);
+        await updateDoc(docRef, {
+            time: `${hours}:${minutes}:${seconds}`
+        })
+    }
+
     const startStopwatch = () => {
         setIsRunning(true);
     };
@@ -37,6 +69,8 @@ const Stopwatch = () => {
     const stopStopwatch = () => {
         setIsRunning(false);
     };
+
+
 
     const resetStopwatch = () => {
         setHours(0);

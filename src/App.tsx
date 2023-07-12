@@ -8,6 +8,8 @@ import RegisterForm from './components/Register/Register'
 import Header from './components/Header/Header'
 import './App.css'
 
+import "primereact/resources/themes/saga-blue/theme.css"
+
 function App() {
 
   const [userData, setUserData] = useState<User | null>()
