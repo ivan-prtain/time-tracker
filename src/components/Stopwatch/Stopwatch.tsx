@@ -1,5 +1,5 @@
 import { Timestamp } from '@firebase/firestore';
-import { updateDoc, doc, collection } from 'firebase/firestore'
+import { updateDoc, doc } from 'firebase/firestore'
 import { db } from '../../FirebaseConfig'
 import React, { useState, useEffect } from 'react';
 
@@ -86,9 +86,9 @@ const Stopwatch = ({ isAllSTop, data, isActive }: StopwatchProps) => {
                 <span>{minutes.toString().padStart(2, '0')}:</span>
                 <span>{seconds.toString().padStart(2, '0')}</span>
             </div>
-            <button onClick={startStopwatch}>Start</button>
+            {/* <button onClick={startStopwatch}>Start</button>
             <button onClick={stopStopwatch}>Stop</button>
-            <button onClick={resetStopwatch}>Reset</button>
+            <button onClick={resetStopwatch}>Reset</button> */}
         </div>
     );
 };

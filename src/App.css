@@ -25,4 +25,5 @@ textarea {
 
 .app {
   width: 100vw;
+  overflow: auto;
 }

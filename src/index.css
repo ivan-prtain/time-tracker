@@ -37,10 +37,37 @@ h1 {
 }
 
 Button {
+  border-radius: 5px;
   caret-color: transparent;
   color: white;
   background: #FF5722;
   border: none;
+  height: 36px;
+
+  &:hover {
+    cursor: pointer;
+    background: red;
+
+  }
+}
 
 
+.btn-control {
+  border: 2px solid #FF5722;
+  border-radius: 50%;
+  color: #FF5722;
+  background-color: white;
+  height: 28px;
+
+  &:hover {
+    border: 2px solid red;
+    color: red;
+    background-color: white;
+    cursor: pointer;
+  }
+
+}
+
+.btn-control .pi {
+  font-size: 10px;
 }

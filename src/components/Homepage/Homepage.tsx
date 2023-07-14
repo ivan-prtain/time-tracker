@@ -1,19 +1,30 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import React, { useCallback, useEffect, useState } from 'react'
 import Stopwatch from '../Stopwatch/Stopwatch'
 import { db } from '../../FirebaseConfig'
-import { getDocs, collection, query, where, addDoc, serverTimestamp } from 'firebase/firestore'
+import { getDocs, collection, query, where, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore'
 import { Timestamp } from 'firebase/firestore';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import Modal from '../Modal/Modal';
+import EditDescription from '../Modal/EditDescription';
+import DeleteWarning from '../Modal/DeleteWarning';
 
 import "./Homepage.scss"
 
-type TrackerType = {
+export type TrackerType = {
     id: string,
     description: string,
     time: string
-    date: Timestamp
+    date?: Timestamp
+}
+
+enum ModalOptions {
+    Edit = "Edit",
+    Delete = "Delete"
 }
 
 const Homepage = () => {
@@ -23,6 +34,10 @@ const Homepage = () => {
     const [activeTrackerId, setActiveTrackerId] = useState('')
     const [isAllSTop, setIsAllSTop] = useState(false)
     const [activeStopwatches, setActiveStopwatches] = useState<string[]>([])
+    const [isStartingNewTimer, setIsStartingNewTimer] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [modalData, setModalData] = useState<TrackerType>()
+    const [modalType, setModalType] = useState(ModalOptions.Edit)
     /*     const todaysDate = new Date()
         todaysDate.setHours(0, 0, 0, 0);
         const todaysTimestamp = todaysDate.getTime() / 1000; */
@@ -35,17 +50,24 @@ const Homepage = () => {
 
     const trackersCollectionRef = collection(db, 'trackers')
 
-    // const queryRef = query(trackersCollectionRef, where('date.seconds', '==', todaysTimestamp));
     const queryRef = query(trackersCollectionRef, where('date', '>=', startTimestamp), where('date', '<=', endTimestamp));
-    useEffect(() => {
-        const getTrackers = async () => {
-            const querySnapshot = await getDocs(queryRef)
-            const data = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-            setTrackers(data as TrackerType[]);
-        }
 
-        getTrackers()
-    }, [])
+
+
+    const getTrackers = useCallback(async () => {
+        console.log("command to get trackers")
+        const querySnapshot = await getDocs(queryRef);
+        const data = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+        setTrackers(data as TrackerType[]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
+    useEffect(
+        () => {
+            getTrackers()
+        }, [getTrackers]
+    )
 
     useEffect(
         () => {
@@ -63,10 +85,11 @@ const Homepage = () => {
                 date: currentDate,
                 description: trackerDescription,
                 time: timeLogged,
-
             })
 
-            console.log({ response })
+            if (response) {
+                getTrackers()
+            }
         } catch (error) {
             console.log(error)
         }
@@ -74,6 +97,16 @@ const Homepage = () => {
 
     const handleAddTracker = () => {
         addTracker()
+        setIsStartingNewTimer(false)
+    }
+
+    const toggleRow = (rowData: TrackerType) => {
+        const isRowActive = isStopwatchActive(rowData.id)
+        if (isRowActive) {
+            handleRowStop(rowData)
+        } else {
+            handleRowStart(rowData)
+        }
     }
 
     const handleRowStart = (rowData: TrackerType) => {
@@ -88,6 +121,49 @@ const Homepage = () => {
         })
         console.log(rowData)
     }
+
+
+    const updateDescription = async (description: string, trackerToEdit: TrackerType) => {
+        const docRef = doc(db, 'trackers', trackerToEdit.id);
+        try {
+            await updateDoc(docRef, {
+                description: description
+            })
+            setIsModalOpen(false)
+            getTrackers()
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const deleteTracker = async (trackerToDelete: TrackerType) => {
+        const docRef = doc(db, 'trackers', trackerToDelete.id);
+        try {
+            await deleteDoc(docRef)
+            setIsModalOpen(false)
+            getTrackers()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleDeleteRow = (rowData: TrackerType) => {
+        setModalType(ModalOptions.Delete)
+        setModalData(rowData)
+        setIsModalOpen(true)
+    }
+
+
+
+
+    const handleEditRow = (rowData: TrackerType) => {
+        setModalType(ModalOptions.Edit)
+        setModalData(rowData)
+        setIsModalOpen(true)
+    }
+
+
 
     const saveLoggedTimeState = (loggedTime: string) => {
         setTimeLogged(loggedTime)
@@ -116,6 +192,7 @@ const Homepage = () => {
     }
 
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     useEffect(() => {
 
     }, [activeStopwatches])
@@ -124,16 +201,20 @@ const Homepage = () => {
     return (
         <div className='homepage'>
             <div>
-
+                <h2>{`Today ${new Date().toLocaleDateString('hr-HR')}`}</h2>
             </div>
-            <Button onClick={checkOutput}>check output</Button>
+            {/* <button onClick={checkOutput} style={{ marginBottom: "3px" }}>check output</button> */}
             <div>
                 <div>
-                    <Button>Start new timer</Button>
-                    <div>
-                        <input type="text" placeholder='Description' onChange={(e) => setTrackerDescription(e.target.value)} />
-                        <Button onClick={handleAddTracker}>Add</Button>
-                    </div>
+                    {isStartingNewTimer ?
+                        <div>
+                            <input type="text" placeholder='Description' onChange={(e) => setTrackerDescription(e.target.value)} />
+                            <button onClick={handleAddTracker}>Add</button>
+                            <button onClick={() => setIsStartingNewTimer(false)}>Cancel</button>
+                        </div>
+                        :
+                        <button onClick={() => setIsStartingNewTimer(true)}>Start new timer</button>
+                    }
                 </div>
             </div>
             <div className='card'>
@@ -142,13 +223,27 @@ const Homepage = () => {
                         <Column field="time" header="Time" style={{ width: '20%' }} />
                         <Column field="stopwatch" header="Time" body={(rowData) => <><Stopwatch isAllSTop={isAllSTop} data={rowData} isActive={isStopwatchActive(rowData.id)} /></>} />
                         <Column field="description" header="Description" style={{ width: '60%' }} />
-                        <Column field="actions" header="Actions" body={(rowData) => <>
-                            <Button onClick={() => handleRowStart(rowData)}>Start</Button>
-                            <Button onClick={() => handleRowStop(rowData)}>Stop</Button>
+                        <Column field="actions" header="Actions" style={{ width: '20%' }} body={(rowData) => <>
+                            <div className='btn-control-group'>
+
+                                {isStopwatchActive(rowData.id)
+                                    ?
+                                    <button className='btn-control' onClick={() => toggleRow(rowData)}><i className='pi pi-pause'></i></button>
+                                    :
+                                    <button className='btn-control' onClick={() => handleRowStart(rowData)}><i className='pi pi-play'></i></button>}
+
+                                <button className='btn-control' onClick={() => handleEditRow(rowData)}><i className='pi pi-pencil'></i></button>
+                                <button className='btn-control' onClick={() => handleDeleteRow(rowData)}><i className='pi pi-trash'></i></button>
+                            </div>
                         </>} />
                     </DataTable>
                 }
             </div>
+
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                {modalType === ModalOptions.Edit && <EditDescription trackerToEdit={modalData} onSave={updateDescription} />}
+                {modalType === ModalOptions.Delete && <DeleteWarning trackerToDelete={modalData} onConfirm={deleteTracker} onCancel={() => setIsModalOpen(false)} />}
+            </Modal>
 
 
 
