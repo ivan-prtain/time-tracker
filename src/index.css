@@ -78,3 +78,7 @@ Button {
     cursor: pointer;
   }
 }
+
+.p-inputtext {
+  height: 36px;
+}

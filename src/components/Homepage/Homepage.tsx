@@ -1,12 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useCallback, useEffect, useState } from 'react'
 import Stopwatch from '../Stopwatch/Stopwatch'
 import { db } from '../../FirebaseConfig'
 import { getDocs, collection, query, where, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore'
 import { Timestamp } from 'firebase/firestore';
-import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import Modal from '../Modal/Modal';
@@ -22,7 +18,7 @@ export type TrackerType = {
     date?: Timestamp
 }
 
-enum ModalOptions {
+export enum ModalOptions {
     Edit = "Edit",
     Delete = "Delete"
 }
@@ -207,7 +203,7 @@ const Homepage = () => {
             <div>
                 <div>
                     {isStartingNewTimer ?
-                        <div>
+                        <div className='new-timer'>
                             <input type="text" placeholder='Description' onChange={(e) => setTrackerDescription(e.target.value)} />
                             <button onClick={handleAddTracker}>Add</button>
                             <button onClick={() => setIsStartingNewTimer(false)}>Cancel</button>

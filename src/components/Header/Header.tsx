@@ -51,7 +51,14 @@ const Header = ({ isLogged }: HeaderProps) => {
                     <span className={currentPath === "/history" ? "header__links-highlight--active" : ""}></span>
                 </div>
             </div>
-            {isLogged && <button className="header__logout-btn" onClick={logOut}>Logout</button>}
+            {isLogged &&
+                <span className="header__link-wrapper">
+
+                    <button className="header__logout-btn" onClick={logOut}>
+                        <i className="pi pi-power-off"></i>
+                        <span className="header__logout-btn-txt">Logout</span></button>
+                </span>
+            }
         </div >
     )
 }
