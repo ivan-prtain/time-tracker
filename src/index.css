@@ -71,3 +71,10 @@ Button {
 .btn-control .pi {
   font-size: 10px;
 }
+
+.input-close {
+
+  &:hover {
+    cursor: pointer;
+  }
+}
