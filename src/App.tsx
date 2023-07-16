@@ -15,10 +15,16 @@ import "primereact/resources/primereact.min.css"
 function App() {
 
   const [userData, setUserData] = useState<User | null>()
+  const [isLoading, setIsLoading] = useState(true)
 
   onAuthStateChanged(auth, (user) => {
+    setIsLoading(false)
     setUserData(user)
   })
+
+  if (isLoading) {
+    return <>Loading...</>
+  }
 
   return (
     <>

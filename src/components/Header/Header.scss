@@ -20,6 +20,8 @@
     }
 
     &__logout-btn {
+        display: flex;
+        align-items: center;
         margin-left: 20px;
         margin-right: 20px;
         border: none;
@@ -47,6 +49,7 @@
             height: 6px;
             width: 220px;
             transform: translateY(90px);
+            overflow: hidden;
 
 
             & * {

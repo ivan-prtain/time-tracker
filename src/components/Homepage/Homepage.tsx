@@ -26,17 +26,11 @@ export enum ModalOptions {
 const Homepage = () => {
     const [trackers, setTrackers] = useState<TrackerType[]>([])
     const [trackerDescription, setTrackerDescription] = useState('')
-    const [timeLogged, setTimeLogged] = useState("00:00:00")
-    const [activeTrackerId, setActiveTrackerId] = useState('')
-    const [isAllSTop, setIsAllSTop] = useState(false)
     const [activeStopwatches, setActiveStopwatches] = useState<string[]>([])
     const [isStartingNewTimer, setIsStartingNewTimer] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [modalData, setModalData] = useState<TrackerType>()
     const [modalType, setModalType] = useState(ModalOptions.Edit)
-    /*     const todaysDate = new Date()
-        todaysDate.setHours(0, 0, 0, 0);
-        const todaysTimestamp = todaysDate.getTime() / 1000; */
 
     const todaysDate = new Date()
 
@@ -55,7 +49,6 @@ const Homepage = () => {
         const querySnapshot = await getDocs(queryRef);
         const data = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
         setTrackers(data as TrackerType[]);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -80,7 +73,7 @@ const Homepage = () => {
             const response = await addDoc(trackersCollectionRef, {
                 date: currentDate,
                 description: trackerDescription,
-                time: timeLogged,
+                time: "00:00:00",
             })
 
             if (response) {
@@ -107,7 +100,6 @@ const Homepage = () => {
 
     const handleRowStart = (rowData: TrackerType) => {
         setActiveStopwatches((prevStopwatches) => [...prevStopwatches, rowData.id])
-        setActiveTrackerId(rowData.id)
         console.log(rowData)
     }
 
@@ -163,36 +155,11 @@ const Homepage = () => {
         setIsModalOpen(true)
     }
 
-
-
-    const saveLoggedTimeState = (loggedTime: string) => {
-        setTimeLogged(loggedTime)
-
-        setTrackers((prevTrackers) => {
-            console.log("here")
-            return prevTrackers.map((tracker) => {
-                if (tracker.id === activeTrackerId) {
-                    console.log("there is a match")
-                    return { ...tracker, time: loggedTime };
-                }
-                return tracker;
-            });
-        });
-
-        console.log(trackers)
-    }
-
-
-    const checkOutput = () => {
-        console.log(trackers)
-    }
-
     const isStopwatchActive = (id: string) => {
         return activeStopwatches.includes(id)
     }
 
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     useEffect(() => {
 
     }, [activeStopwatches])
@@ -203,9 +170,8 @@ const Homepage = () => {
             <div>
                 <h2>{`Today ${new Date().toLocaleDateString('hr-HR')}`}</h2>
             </div>
-            {/* <button onClick={checkOutput} style={{ marginBottom: "3px" }}>check output</button> */}
-            <div>
-                <div>
+            <div className='homepage__main-buttons-container'>
+                <div className='homepage__main-buttons'>
                     {isStartingNewTimer ?
                         <div className='new-timer'>
                             <input type="text" placeholder='Description' onChange={(e) => setTrackerDescription(e.target.value)} />
@@ -213,16 +179,15 @@ const Homepage = () => {
                             <button onClick={() => setIsStartingNewTimer(false)}>Cancel</button>
                         </div>
                         :
-                        <button onClick={() => setIsStartingNewTimer(true)}>Start new timer</button>
+                        <button className='btn-icon' onClick={() => setIsStartingNewTimer(true)}><i className='pi pi-stopwatch'></i> <span>Start new timer</span></button>
                     }
-                    <button onClick={stopAllStopwatches}>Stop all</button>
+                    <button className='secondary-btn-background btn-icon' onClick={stopAllStopwatches}><i className='pi pi-stop-circle'></i><span >Stop all</span></button>
                 </div>
             </div>
-            <div className='card'>
+            <div className='homepage__trackers'>
                 {trackers &&
                     <DataTable value={trackers} paginator rows={10} tableStyle={{ minWidth: '60rem' }}>
-                        <Column field="time" header="Time" style={{ width: '20%' }} />
-                        <Column field="stopwatch" header="Time" body={(rowData) => <><Stopwatch isAllSTop={isAllSTop} data={rowData} isActive={isStopwatchActive(rowData.id)} /></>} />
+                        <Column field="stopwatch" header="Time" style={{ width: '20%' }} body={(rowData) => <><Stopwatch data={rowData} isActive={isStopwatchActive(rowData.id)} /></>} />
                         <Column field="description" header="Description" style={{ width: '60%' }} />
                         <Column field="actions" header="Actions" style={{ width: '20%' }} body={(rowData) => <>
                             <div className='btn-control-group'>

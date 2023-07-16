@@ -11,12 +11,11 @@ type TrackerType = {
 }
 
 type StopwatchProps = {
-    isAllSTop: boolean
     isActive: boolean
     data: TrackerType
 }
 
-const Stopwatch = ({ isAllSTop, data, isActive }: StopwatchProps) => {
+const Stopwatch = ({ data, isActive }: StopwatchProps) => {
     const [hours, setHours] = useState(parseInt(data.time.split(':')[0]));
     const [minutes, setMinutes] = useState(parseInt(data.time.split(':')[1]));
     const [seconds, setSeconds] = useState(parseInt(data.time.split(':')[2]));
@@ -55,29 +54,20 @@ const Stopwatch = ({ isAllSTop, data, isActive }: StopwatchProps) => {
         }
     }, [isActive]);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            updateDbTime();
+        }, 10 * 60 * 1000); // 10 minutes
+
+        return () => clearInterval(interval);
+    }, []);
+
     const updateDbTime = async () => {
         const docRef = doc(db, 'trackers', data.id);
         await updateDoc(docRef, {
             time: `${hours}:${minutes}:${seconds}`
         })
     }
-
-    const startStopwatch = () => {
-        setIsRunning(true);
-    };
-
-    const stopStopwatch = () => {
-        setIsRunning(false);
-    };
-
-
-
-    const resetStopwatch = () => {
-        setHours(0);
-        setMinutes(0);
-        setSeconds(0);
-        setIsRunning(false);
-    };
 
     return (
         <div>
@@ -86,9 +76,6 @@ const Stopwatch = ({ isAllSTop, data, isActive }: StopwatchProps) => {
                 <span>{minutes.toString().padStart(2, '0')}:</span>
                 <span>{seconds.toString().padStart(2, '0')}</span>
             </div>
-            {/* <button onClick={startStopwatch}>Start</button>
-            <button onClick={stopStopwatch}>Stop</button>
-            <button onClick={resetStopwatch}>Reset</button> */}
         </div>
     );
 };

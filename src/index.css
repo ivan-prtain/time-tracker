@@ -66,10 +66,27 @@ Button {
     cursor: pointer;
   }
 
+  >i {
+
+    transform: translateX(1px);
+
+  }
+
 }
 
 .btn-control .pi {
   font-size: 10px;
+}
+
+.secondary-btn-background {
+  background-color: #181846;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0px 10px;
 }
 
 .input-close {

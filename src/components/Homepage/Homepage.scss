@@ -5,6 +5,23 @@
     margin-top: 60px;
     padding: 0 60px;
     gap: 20px;
+
+    &__main-buttons {
+        display: flex;
+        gap: 20px;
+
+        &-container {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            max-width: 1800px;
+        }
+    }
+
+    &__trackers {
+        width: 100%;
+        max-width: 1800px;
+    }
 }
 
 .btn-control-group {
