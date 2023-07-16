@@ -41,10 +41,10 @@ function App() {
               path='/register'
               element={<RegisterForm />}
             />
-            <Route
+            {userData && <Route
               path='/history'
               element={<History />}
-            />
+            />}
           </Routes>
 
         </div>

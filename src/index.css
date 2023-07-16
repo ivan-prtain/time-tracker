@@ -3,10 +3,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  /*   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424; */
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,7 +11,7 @@
 }
 
 a {
-  font-weight: 500;
+  font-weight: 400;
   color: #646cff;
   text-decoration: inherit;
 }
@@ -53,9 +49,12 @@ Button {
 
 
 .btn-control {
-  border: 2px solid #FF5722;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #5F6B8A;
   border-radius: 50%;
-  color: #FF5722;
+  color: #5F6B8A;
   background-color: white;
   height: 28px;
 
@@ -66,6 +65,11 @@ Button {
     cursor: pointer;
   }
 
+}
+
+.btn-control-primary {
+  color: #FF5722;
+  border-color: #FF5722;
 }
 
 .btn-control .pi {

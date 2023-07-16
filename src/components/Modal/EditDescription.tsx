@@ -17,9 +17,12 @@ const EditDescription = ({ trackerToEdit, onSave }: EditDescriptionProps) => {
         return
     } else {
         return (
-            <div>
-                <input type='text' value={description} onChange={(e) => setDescription(e.target.value)} />
-                <button onClick={() => onSave(description, trackerToEdit)}>Save</button>
+            <div className='edit-description-container'>
+                <div className='edit-description-input-container'>
+                    <label htmlFor='modal-edit-description-input'>Description:</label>
+                    <input id="modal-edit-description-input" className='edit-description-input' type='text' value={description} onChange={(e) => setDescription(e.target.value)} />
+                </div>
+                <button className='edit-description-save' onClick={() => onSave(description, trackerToEdit)}>Save</button>
             </div>
         )
     }

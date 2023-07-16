@@ -26,10 +26,13 @@
         margin-right: 20px;
         border: none;
         background: none;
+        color: #C4C5D7;
 
 
         &-txt {
             margin-left: 10px;
+            font-size: 20px;
+
         }
     }
 
@@ -41,19 +44,20 @@
         margin-right: 40px;
         height: 100%;
 
+
         &-highlight {
             display: flex;
             position: absolute;
             border-radius: 20px;
             background-color: #C4C5D7;
             height: 6px;
-            width: 220px;
-            transform: translateY(90px);
+            width: 280px;
+            transform: translate(-25px, 90px);
             overflow: hidden;
 
 
             & * {
-                width: 110px;
+                width: 140px;
             }
 
 
@@ -67,9 +71,17 @@
         }
     }
 
+    &__link--active {
+        font-weight: 600;
+    }
+
     &__link-wrapper {
         display: flex;
         gap: 10px;
         align-items: center;
+
+        >a {
+            color: #C4C5D7;
+        }
     }
 }

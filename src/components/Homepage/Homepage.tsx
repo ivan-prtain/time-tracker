@@ -168,7 +168,7 @@ const Homepage = () => {
     return (
         <div className='homepage'>
             <div>
-                <h2>{`Today ${new Date().toLocaleDateString('hr-HR')}`}</h2>
+                <h2>{`Today (${new Date().toLocaleDateString('hr-HR')})`}</h2>
             </div>
             <div className='homepage__main-buttons-container'>
                 <div className='homepage__main-buttons'>
@@ -194,9 +194,9 @@ const Homepage = () => {
 
                                 {isStopwatchActive(rowData.id)
                                     ?
-                                    <button className='btn-control' onClick={() => toggleRow(rowData)}><i className='pi pi-pause'></i></button>
+                                    <button className='btn-control btn-control-primary' onClick={() => toggleRow(rowData)}><i className='pi pi-pause'></i></button>
                                     :
-                                    <button className='btn-control' onClick={() => handleRowStart(rowData)}><i className='pi pi-play'></i></button>}
+                                    <button className='btn-control btn-control-primary' onClick={() => handleRowStart(rowData)}><i className='pi pi-play'></i></button>}
 
                                 <button className='btn-control' onClick={() => handleEditRow(rowData)}><i className='pi pi-pencil'></i></button>
                                 <button className='btn-control' onClick={() => handleDeleteRow(rowData)}><i className='pi pi-trash'></i></button>

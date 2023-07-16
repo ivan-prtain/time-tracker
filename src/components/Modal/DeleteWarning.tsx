@@ -12,7 +12,7 @@ const DeleteWarning = ({ onConfirm, onCancel, trackerToDelete }: DeleteWarningPr
     if (!trackerToDelete) return
 
     return (
-        <div>
+        <div className='delete-warning'>
             <div>Are you sure you want to delete this tracker?</div>
             <div className='delete-warning-buttons'>
                 <button onClick={() => onConfirm(trackerToDelete)}>Yes</button>
