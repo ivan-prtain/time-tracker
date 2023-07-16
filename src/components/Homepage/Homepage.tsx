@@ -33,13 +33,9 @@ const Homepage = () => {
     const [modalType, setModalType] = useState(ModalOptions.Edit)
 
     const todaysDate = new Date()
-
     const startTimestamp = Timestamp.fromDate(new Date(todaysDate.getFullYear(), todaysDate.getMonth(), todaysDate.getDate()));
     const endTimestamp = Timestamp.fromDate(new Date(todaysDate.getFullYear(), todaysDate.getMonth(), todaysDate.getDate(), 23, 59, 59));
-
-
     const trackersCollectionRef = collection(db, 'trackers')
-
     const queryRef = query(trackersCollectionRef, where('date', '>=', startTimestamp), where('date', '<=', endTimestamp));
 
 
@@ -52,19 +48,7 @@ const Homepage = () => {
     }, []);
 
 
-    useEffect(
-        () => {
-            getTrackers()
-        }, [getTrackers]
-    )
 
-    useEffect(
-        () => {
-            if (trackers) {
-                console.log(trackers)
-            }
-        }, [trackers]
-    )
 
     const addTracker = async () => {
         const currentDate = serverTimestamp()
@@ -146,9 +130,6 @@ const Homepage = () => {
         setIsModalOpen(true)
     }
 
-
-
-
     const handleEditRow = (rowData: TrackerType) => {
         setModalType(ModalOptions.Edit)
         setModalData(rowData)
@@ -159,11 +140,23 @@ const Homepage = () => {
         return activeStopwatches.includes(id)
     }
 
+    useEffect(
+        () => {
+            getTrackers()
+        }, [getTrackers]
+    )
+
+    useEffect(
+        () => {
+            if (trackers) {
+                console.log(trackers)
+            }
+        }, [trackers]
+    )
 
     useEffect(() => {
 
     }, [activeStopwatches])
-
 
     return (
         <div className='homepage'>
@@ -210,9 +203,6 @@ const Homepage = () => {
                 {modalType === ModalOptions.Edit && <EditDescription trackerToEdit={modalData} onSave={updateDescription} />}
                 {modalType === ModalOptions.Delete && <DeleteWarning trackerToDelete={modalData} onConfirm={deleteTracker} onCancel={() => setIsModalOpen(false)} />}
             </Modal>
-
-
-
         </div>
     )
 }
