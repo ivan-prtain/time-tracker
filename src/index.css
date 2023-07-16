@@ -3,10 +3,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  /*   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424; */
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,7 +11,7 @@
 }
 
 a {
-  font-weight: 500;
+  font-weight: 400;
   color: #646cff;
   text-decoration: inherit;
 }
@@ -37,10 +33,67 @@ h1 {
 }
 
 Button {
+  border-radius: 5px;
   caret-color: transparent;
   color: white;
   background: #FF5722;
   border: none;
+  height: 36px;
+
+  &:hover {
+    cursor: pointer;
+    background: red;
+
+  }
+}
 
 
+.btn-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #5F6B8A;
+  border-radius: 50%;
+  color: #5F6B8A;
+  background-color: white;
+  height: 28px;
+
+  &:hover {
+    border: 2px solid red;
+    color: red;
+    background-color: white;
+    cursor: pointer;
+  }
+
+}
+
+.btn-control-primary {
+  color: #FF5722;
+  border-color: #FF5722;
+}
+
+.btn-control .pi {
+  font-size: 10px;
+}
+
+.secondary-btn-background {
+  background-color: #181846;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0px 10px;
+}
+
+.input-close {
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.p-inputtext {
+  height: 36px;
 }

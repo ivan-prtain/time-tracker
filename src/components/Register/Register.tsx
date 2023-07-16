@@ -45,17 +45,18 @@ const RegisterForm = () => {
         } else {
             alert("Password must contain at least one letter and one number and length of at least 6 characters")
         }
-        //createUser({ email: email as string, password: password as string })
     }
 
     return (
-        <div className="register-form-container">
-            <h1>Register Form</h1>
-            <form className="login-form" onSubmit={handleSubmit}>
-                <input placeholder="Email" type="email" name="email" required />
-                <input placeholder="Password" type="password" name="password" required />
-                <button type="submit">Submit registration</button>
-            </form>
+        <div className="login">
+            <div className="login-form-container">
+                <h1>Register Form</h1>
+                <form className="login-form" onSubmit={handleSubmit}>
+                    <input placeholder="Email" type="email" name="email" required />
+                    <input placeholder="Password" type="password" name="password" required />
+                    <button type="submit">Submit registration</button>
+                </form>
+            </div>
         </div>
     )
 }

@@ -3,17 +3,18 @@ import { auth } from "../../FirebaseConfig";
 import { Button } from 'primereact/button';
 import { Link } from "react-router-dom";
 import 'primeicons/primeicons.css';
-import { PrimeIcons } from 'primereact/api';
 
 import "./Login.scss"
 
-import React from 'react'
+import React, { useState } from 'react'
 
 
 const Login = () => {
+    const [isLoading, setIsLoading] = useState(false)
 
     const loginUser = async (email: string, password: string) => {
         try {
+            setIsLoading(true)
             const response = await signInWithEmailAndPassword(auth, email, password)
 
             if (response.user) {
@@ -21,6 +22,9 @@ const Login = () => {
             }
         } catch (error) {
             console.log(error)
+            alert("Login failed")
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -38,7 +42,7 @@ const Login = () => {
                 <form className="login-form" onSubmit={handleSubmit}>
                     <input placeholder="Email" type="email" name="email" required />
                     <input placeholder="Password" type="password" name="password" required />
-                    <Button label="Login" type="submit" />
+                    <Button loading={isLoading} label="Login" type="submit" />
                 </form>
             </div>
             <div className="login__register-link-container">

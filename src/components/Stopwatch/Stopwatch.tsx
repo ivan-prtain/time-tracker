@@ -1,9 +1,24 @@
+import { Timestamp } from '@firebase/firestore';
+import { updateDoc, doc } from 'firebase/firestore'
+import { db } from '../../FirebaseConfig'
 import React, { useState, useEffect } from 'react';
 
-const Stopwatch = () => {
-    const [hours, setHours] = useState(0);
-    const [minutes, setMinutes] = useState(0);
-    const [seconds, setSeconds] = useState(0);
+type TrackerType = {
+    id: string,
+    description: string,
+    time: string
+    date: Timestamp
+}
+
+type StopwatchProps = {
+    isActive: boolean
+    data: TrackerType
+}
+
+const Stopwatch = ({ data, isActive }: StopwatchProps) => {
+    const [hours, setHours] = useState(parseInt(data.time.split(':')[0]));
+    const [minutes, setMinutes] = useState(parseInt(data.time.split(':')[1]));
+    const [seconds, setSeconds] = useState(parseInt(data.time.split(':')[2]));
     const [isRunning, setIsRunning] = useState(false);
 
     useEffect(() => {
@@ -30,20 +45,29 @@ const Stopwatch = () => {
         return () => clearInterval(interval);
     }, [isRunning]);
 
-    const startStopwatch = () => {
-        setIsRunning(true);
-    };
+    useEffect(() => {
+        if (isActive) {
+            setIsRunning(true);
+        } else {
+            setIsRunning(false);
+            updateDbTime();
+        }
+    }, [isActive]);
 
-    const stopStopwatch = () => {
-        setIsRunning(false);
-    };
+    useEffect(() => {
+        const interval = setInterval(() => {
+            updateDbTime();
+        }, 10 * 60 * 1000); // 10 minutes
 
-    const resetStopwatch = () => {
-        setHours(0);
-        setMinutes(0);
-        setSeconds(0);
-        setIsRunning(false);
-    };
+        return () => clearInterval(interval);
+    }, []);
+
+    const updateDbTime = async () => {
+        const docRef = doc(db, 'trackers', data.id);
+        await updateDoc(docRef, {
+            time: `${hours}:${minutes}:${seconds}`
+        })
+    }
 
     return (
         <div>
@@ -52,9 +76,6 @@ const Stopwatch = () => {
                 <span>{minutes.toString().padStart(2, '0')}:</span>
                 <span>{seconds.toString().padStart(2, '0')}</span>
             </div>
-            <button onClick={startStopwatch}>Start</button>
-            <button onClick={stopStopwatch}>Stop</button>
-            <button onClick={resetStopwatch}>Reset</button>
         </div>
     );
 };
