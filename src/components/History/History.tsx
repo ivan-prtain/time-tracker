@@ -88,7 +88,6 @@ const History = () => {
         }
     }
 
-
     const handleEditRow = (rowData: TrackerType) => {
         setModalType(ModalOptions.Edit)
         setModalData(rowData)
@@ -111,7 +110,6 @@ const History = () => {
         setModalData(rowData)
         setIsModalOpen(true)
     }
-
 
     // using this way of filtering by description because firebase doesnt support multiple fields filtering with such conditions
     useEffect(
@@ -153,7 +151,6 @@ const History = () => {
 
                 </div>
             </div>
-
 
             <div className='history__trackers'>
                 {trackers &&
