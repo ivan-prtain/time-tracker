@@ -65,6 +65,8 @@ const History = () => {
             queryRef = query(trackersCollectionRef, where('date', '>=', startTimestamp));
         } else if (endTimestamp) {
             queryRef = query(trackersCollectionRef, where('date', '<=', endTimestamp));
+        } else {
+            queryRef = query(trackersCollectionRef);
         }
 
         if (queryRef) {

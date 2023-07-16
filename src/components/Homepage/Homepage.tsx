@@ -118,6 +118,10 @@ const Homepage = () => {
         console.log(rowData)
     }
 
+    const stopAllStopwatches = () => {
+        setActiveStopwatches([])
+    }
+
 
     const updateDescription = async (description: string, trackerToEdit: TrackerType) => {
         const docRef = doc(db, 'trackers', trackerToEdit.id);
@@ -211,6 +215,7 @@ const Homepage = () => {
                         :
                         <button onClick={() => setIsStartingNewTimer(true)}>Start new timer</button>
                     }
+                    <button onClick={stopAllStopwatches}>Stop all</button>
                 </div>
             </div>
             <div className='card'>
