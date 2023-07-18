@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Calendar } from 'primereact/calendar';
 import { useState } from 'react';
 import { TrackerType, ModalOptions } from '../Homepage/Homepage';

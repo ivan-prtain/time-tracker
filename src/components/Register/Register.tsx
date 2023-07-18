@@ -47,10 +47,15 @@ const RegisterForm = () => {
         }
     }
 
+    const goBack = () => {
+        navigate(-1)
+    }
+
     return (
         <div className="login">
+            <button onClick={goBack} className="back-button btn-icon"><i className="pi pi-arrow-left"></i><span>Back</span></button>
             <div className="login-form-container">
-                <h1>Register Form</h1>
+                <h1>Register</h1>
                 <form className="login-form" onSubmit={handleSubmit}>
                     <input placeholder="Email" type="email" name="email" required />
                     <input placeholder="Password" type="password" name="password" required />
